@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"UAS PBE/model"
+	"uas_pbe/model"
 )
 
 // Interface untuk service layer

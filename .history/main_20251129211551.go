@@ -8,8 +8,8 @@ import (
 	"uas_pbe/config"
 	"uas_pbe/router"
 	"uas_pbe/repository"
-	"uas_pbe/service"
-	"uas_pbe/controller"
+	"/service"
+	"UAS PBE/controller"
 
 	"context"
 )

@@ -6,10 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"uas_pbe/config"
-	"uas_pbe/router"
-	"uas_pbe/repository"
-	"uas_pbe/service"
-	"uas_pbe/controller"
+	"UAS PBE/router"
+	"UAS PBE/repository"
+	"UAS PBE/service"
+	"UAS PBE/controller"
 
 	"context"
 )

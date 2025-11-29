@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"UAS PBE/model"
+	"uas_pbe/model"
 )
 
 // UserRepo interface untuk service

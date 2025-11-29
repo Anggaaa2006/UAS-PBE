@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"uas_pbe/internal/service"
-	"uas_pbe/utils"
+	"uas/internal/service"
+	"UAS PBE/utils"
 	"github.com/gin-gonic/gin"
 )
 

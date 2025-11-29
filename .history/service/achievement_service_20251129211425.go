@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	mg "uas_pbe/internal/repository/mongo"
-	pg "uas_pbe/internal/repository/postgres"
+	pg "uas/internal/repository/postgres"
 )
 
 // ======== REQUEST STRUCTS (DTO) ========

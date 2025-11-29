@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"uas_pbe/controller"
-	"uas_pbe/middleware"
+	"UAS PBE/middleware"
 )
 
 // NewRouter membuat dan mengembalikan instance Gin Engine

@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"UAS PBE/model"
+	"/model"
 )
 
 type RoleRepo interface {

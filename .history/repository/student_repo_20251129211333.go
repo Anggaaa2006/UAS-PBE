@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"UAS PBE/model"
+	"uas_pbe/model"
 )
 
 type StudentRepo interface {

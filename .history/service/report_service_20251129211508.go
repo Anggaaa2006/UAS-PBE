@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	mg "uas_pbe/internal/repository/mongo"
-	pg "uas_pbe/internal/repository/postgres"
+	pg "uas/internal/repository/postgres"
 )
 
 type ReportService struct {
