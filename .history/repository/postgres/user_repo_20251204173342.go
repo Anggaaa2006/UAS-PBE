@@ -13,9 +13,7 @@ import (
 */
 type UserRepo interface {
     FindByEmail(ctx context.Context, email string) (*model.User, error)
-    GetByEmail(ctx context.Context, email string) (*model.User, error) // alias
     Create(ctx context.Context, user model.User) error
-    List(ctx context.Context) ([]model.User, error)
 }
 
 /*
@@ -33,8 +31,7 @@ func NewUserRepo(db *sql.DB) UserRepo {
 }
 
 /*
-    FindByEmail
-    Ambil user berdasarkan email (primary method)
+    Ambil user berdasarkan email
 */
 func (r *userRepo) FindByEmail(ctx context.Context, email string) (*model.User, error) {
 
@@ -65,15 +62,7 @@ func (r *userRepo) FindByEmail(ctx context.Context, email string) (*model.User, 
 }
 
 /*
-    GetByEmail
-    Alias untuk FindByEmail agar service bisa pakai
-*/
-func (r *userRepo) GetByEmail(ctx context.Context, email string) (*model.User, error) {
-    return r.FindByEmail(ctx, email)
-}
-
-/*
-    Create user (register)
+    Create user (opsional, untuk register)
 */
 func (r *userRepo) Create(ctx context.Context, user model.User) error {
 
@@ -91,42 +80,4 @@ func (r *userRepo) Create(ctx context.Context, user model.User) error {
     )
 
     return err
-}
-
-/*
-    List semua user
-*/
-func (r *userRepo) List(ctx context.Context) ([]model.User, error) {
-
-    q := `
-        SELECT id, name, email, role
-        FROM users
-        ORDER BY name
-    `
-
-    rows, err := r.db.QueryContext(ctx, q)
-    if err != nil {
-        return nil, err
-    }
-    defer rows.Close()
-
-    var list []model.User
-
-    for rows.Next() {
-        var u model.User
-
-        err := rows.Scan(
-            &u.ID,
-            &u.Name,
-            &u.Email,
-            &u.Role,
-        )
-        if err != nil {
-            return nil, err
-        }
-
-        list = append(list, u)
-    }
-
-    return list, nil
 }
