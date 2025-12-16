@@ -5,12 +5,12 @@ import (
 	"log"
 
 	"UAS PBE/config"
-	pg "UAS PBE/internal/repository/postgres"
-	mg "UAS PBE/internal/repository/mongo"
-	"UAS PBE/internal/router"
+	pg "UAS PBE/repository/postgres"
+	mg "UAS PBE/repository/mongo"
+	"UAS PBE/router"
 
-	"UAS PBE/internal/service"
-	"UAS PBE/internal/controller"
+	"UAS PBE/service"
+	"UAS PBE/controller"
 )
 
 func main() {

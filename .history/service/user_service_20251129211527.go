@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	pg "uas_pbe/internal/repository/postgres"
+	pg "uas_pbe/repository/postgres"
 )
 
 type UserService struct {

@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	mg "UAS PBE/internal/repository/mongo"
-	pg "UAS PBE/internal/repository/postgres"
+	mg "UAS PBE/repository/mongo"
+	pg "UAS PBE/repository/postgres"
 )
 
 type ReportService struct {

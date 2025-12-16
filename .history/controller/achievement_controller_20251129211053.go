@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"/internal/service"
+	"/service"
 	"UAS PBE/utils"
 	"github.com/gin-gonic/gin"
 )

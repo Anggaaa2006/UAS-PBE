@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"errors"
-	"UAS PBE/internal/repository/postgres"
+	"UAS PBE/repository/postgres"
 	"UAS PBE/utils"
 )
 

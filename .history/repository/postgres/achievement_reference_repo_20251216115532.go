@@ -30,7 +30,7 @@ type AchievementReferenceRepo interface {
 
     // FR-011: Statistik jumlah prestasi berdasarkan status
     CountByStatus(ctx context.Context) (map[string]int, error)
-}
+
 /*
     Implementasi repository
 */

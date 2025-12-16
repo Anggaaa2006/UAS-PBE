@@ -20,17 +20,8 @@ import (
     KETERKAITAN SRS:
     - FR-010: View All Achievements
 */
-type AchievementReferenceRepo interface {
-    Create(ctx context.Context, ref model.AchievementReference) error
-    GetByID(ctx context.Context, id string) (*model.AchievementReference, error)
-    UpdateStatus(ctx context.Context, id string, status string, note string) error
-    Verify(ctx context.Context, id string, lecturerID string, note string) error
-    Reject(ctx context.Context, id string, lecturerID string, note string) error
-    ListByStudent(ctx context.Context, studentID string) ([]model.AchievementReference, error)
 
-    // FR-011: Statistik jumlah prestasi berdasarkan status
-    CountByStatus(ctx context.Context) (map[string]int, error)
-}
+
 /*
     Implementasi repository
 */
