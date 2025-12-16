@@ -28,8 +28,6 @@ type AchievementReferenceRepo interface {
     Reject(ctx context.Context, id string, lecturerID string, note string) error
     ListByStudent(ctx context.Context, studentID string) ([]model.AchievementReference, error)
 }
-// FR-011: Statistik jumlah prestasi berdasarkan status
-    CountByStatus(ctx context.Context) (map[string]int, error)
 
 /*
     Implementasi repository
@@ -278,53 +276,4 @@ func (r *achievementReferenceRepo) ListByStudent(
     }
 
     return list, nil
-}
-/*
-    CountByStatus
-    Menghitung jumlah prestasi berdasarkan status
-
-    Digunakan untuk:
-    - FR-011 Statistik
-    - Dashboard Admin / Dosen
-
-    Contoh hasil:
-    {
-        "draft": 3,
-        "submitted": 5,
-        "verified": 2,
-        "rejected": 1
-    }
-*/
-func (r *achievementReferenceRepo) CountByStatus(
-    ctx context.Context,
-) (map[string]int, error) {
-
-    query := `
-        SELECT status, COUNT(*) 
-        FROM achievement_references
-        GROUP BY status
-    `
-
-    rows, err := r.db.QueryContext(ctx, query)
-    if err != nil {
-        return nil, err
-    }
-    defer rows.Close()
-
-    // Map untuk menyimpan hasil statistik
-    result := make(map[string]int)
-
-    for rows.Next() {
-        var status string
-        var total int
-
-        err := rows.Scan(&status, &total)
-        if err != nil {
-            return nil, err
-        }
-
-        result[status] = total
-    }
-
-    return result, nil
 }
