@@ -9,5 +9,5 @@ type User struct {
 	Email    string `db:"email" json:"email"`
 	Password string `db:"password" json:"-"`  // tidak boleh ditampilkan kembali
 	Role     string `db:"role" json:"role"`   // WAJIB, dipakai untuk JWT & middleware
-	CreatedAt time.Time `json:"created_at" db:"created_at"`
+	
 }
