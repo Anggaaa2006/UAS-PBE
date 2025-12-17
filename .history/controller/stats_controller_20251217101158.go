@@ -5,7 +5,6 @@ import (
 
     "github.com/gin-gonic/gin"
     "uas_pbe/service"
-    
 )
 
 /*
@@ -42,30 +41,18 @@ func (c *StatsController) GetAchievementStats(ctx *gin.Context) {
 
 /*
     GET /reports/student/:id
+    Statistik prestasi mahasiswa
 
-    Statistik prestasi per mahasiswa
-
-    KETERKAITAN SRS:
-    - FR-011: Achievement Statistics
+    FR-011
 */
-func (c *StatsController) GetStudentStats(ctx *gin.Context) {
+func (c *StatsController) GetStudentReport(ctx *gin.Context) {
+    studentID := ctx.Param("id")
 
-	studentID := ctx.Param("id")
+    data, err := c.service.GetStudentStats(ctx, studentID)
+    if err != nil {
+        utils.Error(ctx, 500, err.Error())
+        return
+    }
 
-	data, err := c.service.GetStudentStats(
-		ctx.Request.Context(),
-		studentID,
-	)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"success": false,
-			"message": err.Error(),
-		})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"data":    data,
-	})
+    utils.SuccessData(ctx, data)
 }

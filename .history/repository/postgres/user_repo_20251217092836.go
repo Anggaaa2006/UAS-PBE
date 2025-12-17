@@ -20,8 +20,6 @@ type UserRepo interface {
     Update(ctx context.Context, user model.User) error
     Delete(ctx context.Context, id string) error
     UpdateRole(ctx context.Context, id string, role string) error
-
-    
 }
 
 /*
@@ -141,37 +139,8 @@ func (r *userRepo) List(ctx context.Context) ([]model.User, error) {
 
 /*
     GetByID
-    Mengambil data user berdasarkan ID
 */
-func (r *userRepo) GetByID(ctx context.Context, id string) (*model.User, error) {
-	query := `
-		SELECT id, name, email, role, created_at
-		FROM users
-		WHERE id = $1
-	`
 
-	var u model.User
-
-	err := r.db.QueryRowContext(ctx, query, id).
-		Scan(
-			&u.ID,
-			&u.Name,
-			&u.Email,
-			&u.Role,
-			&u.CreatedAt,
-		)
-
-	if err == sql.ErrNoRows {
-		return nil, nil
-	}
-
-	if err != nil {
-		return nil, err
-	}
-
-	// ✅ INI YANG BENAR
-	return &u, nil
-}
 /*
     Update user (name, email, role optionally, password must be hashed before)
 */

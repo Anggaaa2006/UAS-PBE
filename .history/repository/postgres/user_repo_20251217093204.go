@@ -21,7 +21,8 @@ type UserRepo interface {
     Delete(ctx context.Context, id string) error
     UpdateRole(ctx context.Context, id string, role string) error
 
-    
+    // Ambil user berdasarkan ID
+	GetByID(ctx context.Context, id string) (*model.User, error)
 }
 
 /*
@@ -151,25 +152,13 @@ func (r *userRepo) GetByID(ctx context.Context, id string) (*model.User, error) 
 	`
 
 	var u model.User
-
 	err := r.db.QueryRowContext(ctx, query, id).
-		Scan(
-			&u.ID,
-			&u.Name,
-			&u.Email,
-			&u.Role,
-			&u.CreatedAt,
-		)
-
-	if err == sql.ErrNoRows {
-		return nil, nil
-	}
+		Scan(&u.ID, &u.Name, &u.Email, &u.Role, &u.CreatedAt)
 
 	if err != nil {
 		return nil, err
 	}
 
-	// ✅ INI YANG BENAR
 	return &u, nil
 }
 /*

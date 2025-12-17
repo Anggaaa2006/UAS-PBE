@@ -105,7 +105,7 @@ func (s *authService) GetProfile(
 ) (*model.User, error) {
 
 	// Ambil user berdasarkan ID
-	user, err := s.repo.GetByID(ctx, userID)
+	user, err := s.userRepo.GetByID(ctx, userID)
 	if err != nil {
 		return nil, err
 	}

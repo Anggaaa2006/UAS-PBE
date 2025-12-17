@@ -17,7 +17,6 @@ func RegisterRoutes(
 	authCtrl *controller.AuthController,
 	achCtrl *controller.AchievementController,
 	statsCtrl *controller.StatsController,
-	adminAchCtrl *controller.AdminAchievementController, // ← pastikan ada
 ) {
 
 	// ================================
@@ -30,6 +29,7 @@ func RegisterRoutes(
 	// ================================
 	auth := r.Group("/auth", middleware.JWTMiddleware())
 	{
+		// Ambil profile user dari JWT
 		auth.GET("/profile", authCtrl.Profile)
 	}
 
@@ -38,14 +38,23 @@ func RegisterRoutes(
 	// ================================
 	ach := r.Group("/achievements", middleware.JWTMiddleware())
 	{
+		// ================================
+		// MAHASISWA
+		// ================================
 		ach.POST("", middleware.RoleStudent(), achCtrl.Create)
 		ach.PUT("/:id", middleware.RoleStudent(), achCtrl.Update)
 		ach.POST("/:id/submit", middleware.RoleStudent(), achCtrl.Submit)
 		ach.DELETE("/:id", middleware.RoleStudent(), achCtrl.Delete)
 
+		// ================================
+		// DOSEN WALI
+		// ================================
 		ach.POST("/:id/approve", middleware.RoleLecturer(), achCtrl.Approve)
 		ach.POST("/:id/reject", middleware.RoleLecturer(), achCtrl.Reject)
 
+		// ================================
+		// LIHAT DETAIL
+		// ================================
 		ach.GET("/:id", achCtrl.GetByID)
 	}
 
@@ -59,30 +68,20 @@ func RegisterRoutes(
 	)
 
 	// ================================
-	// STATISTIK GLOBAL (FR-011)
+	// STATISTIK PRESTASI (FR-011)
 	// ================================
 	stats := r.Group("/stats", middleware.JWTMiddleware())
 	{
 		stats.GET("/achievements", statsCtrl.GetAchievementStats)
 	}
-
+}
 	// ================================
 	// REPORTS PER MAHASISWA (FR-011)
 	// ================================
 	reports := r.Group("/reports", middleware.JWTMiddleware())
 	{
-		reports.GET("/student/:id", statsCtrl.GetStudentStats)
+		reports.GET(
+			"/student/:id",
+			statsCtrl.GetStudentStats,
+		)
 	}
-
-	// ================================
-	// ADMIN – VIEW ALL ACHIEVEMENTS (FR-010)
-	// ================================
-	admin := r.Group(
-		"/admin",
-		middleware.JWTMiddleware(),
-		middleware.RoleAdmin(),
-	)
-	{
-		admin.GET("/achievements", adminAchCtrl.ListAll)
-	}
-}

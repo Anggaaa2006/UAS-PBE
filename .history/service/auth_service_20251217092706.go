@@ -20,8 +20,7 @@ type AuthService interface {
     Register(ctx context.Context, name, email, password string) error
     Login(ctx context.Context, email, password string) (string, error)
 
-    // ✅ TAMBAHAN
-	GetProfile(ctx context.Context, userID string) (*model.User, error)
+    
 }
 
 type authService struct {
@@ -90,32 +89,4 @@ func (s *authService) Login(ctx context.Context, email, password string) (string
     }
 
     return token, nil
-}
-
-/*
-	GetProfile
-	Mengambil data profile user berdasarkan user_id dari JWT
-
-	Digunakan untuk:
-	- GET /auth/profile
-*/
-func (s *authService) GetProfile(
-	ctx context.Context,
-	userID string,
-) (*model.User, error) {
-
-	// Ambil user berdasarkan ID
-	user, err := s.repo.GetByID(ctx, userID)
-	if err != nil {
-		return nil, err
-	}
-
-	if user == nil {
-		return nil, errors.New("user tidak ditemukan")
-	}
-
-	// Jangan kirim password ke controller
-	user.Password = ""
-
-	return user, nil
 }
