@@ -27,9 +27,7 @@ type AchievementReferenceRepo interface {
     Verify(ctx context.Context, id string, lecturerID string, note string) error
     Reject(ctx context.Context, id string, lecturerID string, note string) error
     ListByStudent(ctx context.Context, studentID string) ([]model.AchievementReference, error)
-
-    // FR-010: Admin melihat semua prestasi
-    ListAll(ctx context.Context) ([]model.AchievementReference, error)
+    
     // FR-011: Statistik jumlah prestasi berdasarkan status
     CountByStatus(ctx context.Context) (map[string]int, error)
 }
@@ -329,54 +327,4 @@ func (r *achievementReferenceRepo) CountByStatus(
     }
 
     return result, nil
-}
-/*
-    ListAll
-    Mengambil seluruh prestasi (untuk Admin)
-
-    KETERKAITAN SRS:
-    - FR-010: View All Achievements
-*/
-func (r *achievementReferenceRepo) ListAll(ctx context.Context) ([]model.AchievementReference, error) {
-
-    query := `
-        SELECT 
-            id, student_id, mongo_achievement_id, status,
-            submitted_at, verified_at, verified_by,
-            rejection_note, created_at, updated_at
-        FROM achievement_references
-        ORDER BY created_at DESC
-    `
-
-    rows, err := r.db.QueryContext(ctx, query)
-    if err != nil {
-        return nil, err
-    }
-    defer rows.Close()
-
-    var list []model.AchievementReference
-
-    for rows.Next() {
-        var ref model.AchievementReference
-
-        err := rows.Scan(
-            &ref.ID,
-            &ref.StudentID,
-            &ref.MongoAchievementID,
-            &ref.Status,
-            &ref.SubmittedAt,
-            &ref.VerifiedAt,
-            &ref.VerifiedBy,
-            &ref.RejectionNote,
-            &ref.CreatedAt,
-            &ref.UpdatedAt,
-        )
-        if err != nil {
-            return nil, err
-        }
-
-        list = append(list, ref)
-    }
-
-    return list, nil
 }

@@ -380,3 +380,44 @@ func (r *achievementReferenceRepo) ListAll(ctx context.Context) ([]model.Achieve
 
     return list, nil
 }
+/*
+    CountByStatus
+    Menghitung jumlah prestasi berdasarkan status
+
+    Digunakan untuk:
+    - Statistik admin
+    - Statistik dosen
+    - Statistik mahasiswa
+
+    KETERKAITAN SRS:
+    - FR-011: Achievement Statistics
+*/
+func (r *achievementReferenceRepo) CountByStatus(ctx context.Context) (map[string]int, error) {
+
+    query := `
+        SELECT status, COUNT(*) 
+        FROM achievement_references
+        GROUP BY status
+    `
+
+    rows, err := r.db.QueryContext(ctx, query)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    result := make(map[string]int)
+
+    for rows.Next() {
+        var status string
+        var total int
+
+        if err := rows.Scan(&status, &total); err != nil {
+            return nil, err
+        }
+
+        result[status] = total
+    }
+
+    return result, nil
+}

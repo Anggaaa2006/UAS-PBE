@@ -1,6 +1,6 @@
 package model
 
-import "time"
+
 /*
     Model User untuk login/auth
 */

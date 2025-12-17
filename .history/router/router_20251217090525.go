@@ -16,22 +16,13 @@ func RegisterRoutes(
 	r *gin.Engine,
 	authCtrl *controller.AuthController,
 	achCtrl *controller.AchievementController,
-	statsCtrl *controller.StatsController,
+	statsCtrl *controller.StatsController, // ✅ TAMBAHAN
 ) {
 
 	// ================================
 	// AUTH (Public)
 	// ================================
 	r.POST("/auth/login", authCtrl.Login)
-
-	// ================================
-	// AUTH (Protected)
-	// ================================
-	auth := r.Group("/auth", middleware.JWTMiddleware())
-	{
-		// Ambil profile user dari JWT
-		auth.GET("/profile", authCtrl.Profile)
-	}
 
 	// ================================
 	// ACHIEVEMENT (Protected)
@@ -53,7 +44,7 @@ func RegisterRoutes(
 		ach.POST("/:id/reject", middleware.RoleLecturer(), achCtrl.Reject)
 
 		// ================================
-		// LIHAT DETAIL
+		// LIHAT DETAIL (Student / Lecturer)
 		// ================================
 		ach.GET("/:id", achCtrl.GetByID)
 	}
@@ -72,6 +63,9 @@ func RegisterRoutes(
 	// ================================
 	stats := r.Group("/stats", middleware.JWTMiddleware())
 	{
-		stats.GET("/achievements", statsCtrl.GetAchievementStats)
+		stats.GET(
+			"/achievements",
+			statsCtrl.GetAchievementStats,
+		)
 	}
 }
