@@ -52,10 +52,33 @@ func RegisterRoutes(
 		ach.POST("/:id/reject", middleware.RoleLecturer(), achCtrl.Reject)
 
 		ach.GET("/:id", achCtrl.GetByID)
-		ach.GET("", achCtrl.List)
-		ach.GET("/:id/history", achCtrl.History)
-		ach.POST("/:id/attachments", achCtrl.UploadAttachment)
+		/*
+	ListByRole
+	Menentukan data prestasi berdasarkan role
+*/
+func (s *achievementService) ListByRole(
+	ctx context.Context,
+	userID string,
+	role string,
+) ([]model.AchievementReference, error) {
 
+	switch role {
+
+	case "student":
+		return s.refRepo.ListByStudent(ctx, userID)
+
+	case "lecturer":
+		// sementara dosen bisa lihat semua
+		// (idealnya filter mahasiswa bimbingan)
+		return s.refRepo.ListAll(ctx)
+
+	case "admin":
+		return s.refRepo.ListAll(ctx)
+
+	default:
+		return nil, errors.New("role tidak valid")
+	}
+}
 
 	}
 

@@ -24,6 +24,7 @@ type AuthService interface {
 	GetProfile(ctx context.Context, userID string) (*model.User, error)
 
     // tambahan UAS
+	
 	RefreshToken(ctx context.Context, userID, role string) (string, error)
 	Logout(ctx context.Context) error
 }
@@ -122,29 +123,4 @@ func (s *authService) GetProfile(
 	user.Password = ""
 
 	return user, nil
-}
-/*
-	RefreshToken
-	Membuat token baru berdasarkan user_id dari JWT lama
-*/
-func (s *authService) RefreshToken(
-	ctx context.Context,
-	userID string,
-	role string,
-) (string, error) {
-
-	token, err := middleware.GenerateJWT(userID, role)
-	if err != nil {
-		return "", err
-	}
-
-	return token, nil
-}
-
-/*
-	Logout
-	Karena JWT stateless, logout cukup return success
-*/
-func (s *authService) Logout(ctx context.Context) error {
-	return nil
 }

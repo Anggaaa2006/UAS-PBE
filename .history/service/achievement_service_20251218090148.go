@@ -198,7 +198,7 @@ func (s *AchievementService) ListByStudent(ctx context.Context, studentID string
 	ListByRole
 	Menentukan data prestasi berdasarkan role
 */
-func (s *AchievementService) ListByRole(
+func (s *chievementService) ListByRole(
 	ctx context.Context,
 	userID string,
 	role string,
@@ -207,24 +207,24 @@ func (s *AchievementService) ListByRole(
 	switch role {
 
 	case "student":
-		return s.achRepo.ListByStudent(ctx, userID)
+		return s.refRepo.ListByStudent(ctx, userID)
 
 	case "lecturer":
 		// sementara dosen bisa lihat semua
 		// (idealnya filter mahasiswa bimbingan)
-		return s.achRepo.ListAll(ctx)
+		return s.refRepo.ListAll(ctx)
 
 	case "admin":
-		return s.achRepo.ListAll(ctx)
+		return s.refRepo.ListAll(ctx)
 
 	default:
 		return nil, errors.New("role tidak valid")
 	}
 }
-func (s *AchievementService) GetHistory(
+func (s *achievementService) GetHistory(
 	ctx context.Context,
 	id string,
 ) ([]map[string]interface{}, error) {
 
-	return s.achRepo.GetHistory(ctx, id)
+	return s.refRepo.GetHistory(ctx, id)
 }

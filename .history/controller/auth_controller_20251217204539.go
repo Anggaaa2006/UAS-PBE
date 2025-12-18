@@ -155,22 +155,3 @@ func (c *AuthController) Refresh(ctx *gin.Context) {
 		"token": token,
 	})
 }
-/*
-	POST /auth/logout
-*/
-func (c *AuthController) Logout(ctx *gin.Context) {
-
-	err := c.svc.Logout(ctx.Request.Context())
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"success": false,
-			"message": err.Error(),
-		})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"message": "logout berhasil",
-	})
-}

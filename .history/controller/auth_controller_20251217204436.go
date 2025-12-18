@@ -3,7 +3,7 @@ package controller
 import (
 	"uas_pbe/service"
 	"uas_pbe/utils"
-	"net/http"
+	"net"
 
 	"github.com/gin-gonic/gin"
 )
@@ -134,10 +134,11 @@ func (c *AuthController) Profile(ctx *gin.Context) {
 */
 func (c *AuthController) Refresh(ctx *gin.Context) {
 
+	// Ambil dari middleware JWT
 	userID := ctx.GetString("user_id")
 	role := ctx.GetString("role")
 
-	token, err := c.svc.RefreshToken(
+	token, err := c.service.RefreshToken(
 		ctx.Request.Context(),
 		userID,
 		role,
@@ -155,12 +156,13 @@ func (c *AuthController) Refresh(ctx *gin.Context) {
 		"token": token,
 	})
 }
+
 /*
 	POST /auth/logout
 */
 func (c *AuthController) Logout(ctx *gin.Context) {
 
-	err := c.svc.Logout(ctx.Request.Context())
+	err := c.service.Logout(ctx.Request.Context())
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,

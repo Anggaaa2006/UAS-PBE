@@ -33,9 +33,9 @@ func main() {
 		log.Fatal("failed connect mongo:", err)
 	}
 
-	// ===============================
-	// 2. Init Repository
-	// ===============================
+	// =======================================
+	// 2. Init Repository (Postgres + Mongo)
+	// =======================================
 	achievementPGRepo := postgres.NewAchievementReferenceRepo(pgDB)
 	achievementDetailRepo := mongo.NewAchievementDetailRepo(mongoDB)
 	userPGRepo := postgres.NewUserRepo(pgDB)
@@ -49,15 +49,16 @@ func main() {
 		achievementPGRepo,
 		achievementDetailRepo,
 	)
+	
 
+	// 👉 FR-011 Statistik
 	statsService := service.NewStatsService(achievementPGRepo)
 
+	// 👉 FR-010 Admin Achievement
 	adminAchievementService := service.NewAdminAchievementService(
 		achievementPGRepo,
 		achievementDetailRepo,
 	)
-
-	adminUserService := service.NewAdminUserService(userPGRepo)
 
 	// ===============================
 	// 4. Init Controller
@@ -69,11 +70,8 @@ func main() {
 	adminAchievementController :=
 		controller.NewAdminAchievementController(adminAchievementService)
 
-	adminUserController :=
-		controller.NewAdminUserController(adminUserService)
-
 	// ===============================
-	// 5. Init Gin (INI YANG TADI HILANG)
+	// 5. Init Gin
 	// ===============================
 	r := gin.Default()
 
@@ -85,8 +83,7 @@ func main() {
 		authController,
 		achievementController,
 		statsController,
-		adminAchievementController,
-		adminUserController,
+		adminAchievementController, // ✅ ADMIN
 	)
 
 	// ===============================

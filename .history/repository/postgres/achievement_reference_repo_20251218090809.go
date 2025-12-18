@@ -32,8 +32,7 @@ type AchievementReferenceRepo interface {
     ListAll(ctx context.Context) ([]model.AchievementReference, error)
     // FR-011: Statistik jumlah prestasi berdasarkan status
     CountByStatus(ctx context.Context) (map[string]int, error)
-    // ✅ TAMBAHAN – FR History
-	GetHistory(ctx context.Context, id string) ([]map[string]interface{}, error)
+    
 }
 /*
     Implementasi repository

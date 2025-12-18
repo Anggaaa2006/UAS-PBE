@@ -196,39 +196,3 @@ func (c *AchievementController) List(ctx *gin.Context) {
 
 	utils.SuccessData(ctx, data)
 }
-/*
-	GET /achievements/:id/history
-*/
-func (c *AchievementController) History(ctx *gin.Context) {
-
-	id := ctx.Param("id")
-
-	data, err := c.svc.GetHistory(ctx.Request.Context(), id)
-	if err != nil {
-		utils.Error(ctx, 500, err.Error())
-		return
-	}
-
-	utils.SuccessData(ctx, data)
-}
-/*
-	POST /achievements/:id/attachments
-	Upload dokumen prestasi
-*/
-func (c *AchievementController) UploadAttachment(ctx *gin.Context) {
-
-	file, err := ctx.FormFile("file")
-	if err != nil {
-		utils.Error(ctx, 400, "file wajib diupload")
-		return
-	}
-
-	// Simpan file lokal (contoh)
-	path := "uploads/" + file.Filename
-	ctx.SaveUploadedFile(file, path)
-
-	utils.SuccessData(ctx, gin.H{
-		"filename": file.Filename,
-		"path":     path,
-	})
-}

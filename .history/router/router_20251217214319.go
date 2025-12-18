@@ -53,9 +53,6 @@ func RegisterRoutes(
 
 		ach.GET("/:id", achCtrl.GetByID)
 		ach.GET("", achCtrl.List)
-		ach.GET("/:id/history", achCtrl.History)
-		ach.POST("/:id/attachments", achCtrl.UploadAttachment)
-
 
 	}
 

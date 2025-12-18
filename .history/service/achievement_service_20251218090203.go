@@ -212,19 +212,19 @@ func (s *AchievementService) ListByRole(
 	case "lecturer":
 		// sementara dosen bisa lihat semua
 		// (idealnya filter mahasiswa bimbingan)
-		return s.achRepo.ListAll(ctx)
+		return s.refRepo.ListAll(ctx)
 
 	case "admin":
-		return s.achRepo.ListAll(ctx)
+		return s.refRepo.ListAll(ctx)
 
 	default:
 		return nil, errors.New("role tidak valid")
 	}
 }
-func (s *AchievementService) GetHistory(
+func (s *achievementService) GetHistory(
 	ctx context.Context,
 	id string,
 ) ([]map[string]interface{}, error) {
 
-	return s.achRepo.GetHistory(ctx, id)
+	return s.refRepo.GetHistory(ctx, id)
 }

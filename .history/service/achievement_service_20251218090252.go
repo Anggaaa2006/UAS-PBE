@@ -226,5 +226,5 @@ func (s *AchievementService) GetHistory(
 	id string,
 ) ([]map[string]interface{}, error) {
 
-	return s.achRepo.GetHistory(ctx, id)
+	return s.refRepo.GetHistory(ctx, id)
 }

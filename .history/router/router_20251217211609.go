@@ -18,7 +18,6 @@ func RegisterRoutes(
 	achCtrl *controller.AchievementController,
 	statsCtrl *controller.StatsController,
 	adminAchCtrl *controller.AdminAchievementController, // ← pastikan ada
-	adminUserCtrl *controller.AdminUserController,
 ) {
 
 	// ================================
@@ -52,11 +51,6 @@ func RegisterRoutes(
 		ach.POST("/:id/reject", middleware.RoleLecturer(), achCtrl.Reject)
 
 		ach.GET("/:id", achCtrl.GetByID)
-		ach.GET("", achCtrl.List)
-		ach.GET("/:id/history", achCtrl.History)
-		ach.POST("/:id/attachments", achCtrl.UploadAttachment)
-
-
 	}
 
 	// ================================
@@ -100,7 +94,7 @@ func RegisterRoutes(
     	admin.PUT("/users/:id", adminUserCtrl.Update)
     	admin.DELETE("/users/:id", adminUserCtrl.Delete)
     	admin.PUT("/users/:id/role", adminUserCtrl.UpdateRole)
-		// ADMIN – ACHIEVEMENTS (FR-010)
+		
 		admin.GET("/achievements", adminAchCtrl.ListAll)
 	}
 }
