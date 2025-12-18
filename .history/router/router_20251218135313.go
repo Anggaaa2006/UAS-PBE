@@ -17,9 +17,8 @@ func RegisterRoutes(
 	authCtrl *controller.AuthController,
 	achCtrl *controller.AchievementController,
 	statsCtrl *controller.StatsController,
-	adminAchCtrl *controller.AdminAchievementController,
+	adminAchCtrl *controller.AdminAchievementController, // ← pastikan ada
 	adminUserCtrl *controller.AdminUserController,
-	dashboardCtrl *controller.DashboardController, // ✅ TAMBAHAN
 ) {
 
 	// ================================
@@ -33,30 +32,30 @@ func RegisterRoutes(
 	auth := r.Group("/auth", middleware.JWTMiddleware())
 	{
 		auth.GET("/profile", authCtrl.Profile)
+
+		// ✅ TAMBAHAN
 		auth.POST("/refresh", authCtrl.Refresh)
 		auth.POST("/logout", authCtrl.Logout)
 	}
 
 	// ================================
-	// ACHIEVEMENT
+	// ACHIEVEMENT (Protected)
 	// ================================
 	ach := r.Group("/achievements", middleware.JWTMiddleware())
 	{
-		// Mahasiswa
 		ach.POST("", middleware.RoleStudent(), achCtrl.Create)
 		ach.PUT("/:id", middleware.RoleStudent(), achCtrl.Update)
 		ach.POST("/:id/submit", middleware.RoleStudent(), achCtrl.Submit)
 		ach.DELETE("/:id", middleware.RoleStudent(), achCtrl.Delete)
 
-		// Dosen
 		ach.POST("/:id/approve", middleware.RoleLecturer(), achCtrl.Approve)
 		ach.POST("/:id/reject", middleware.RoleLecturer(), achCtrl.Reject)
 
-		// Umum
-		ach.GET("", achCtrl.List)
 		ach.GET("/:id", achCtrl.GetByID)
+		ach.GET("", achCtrl.List)
 		ach.GET("/:id/history", achCtrl.History)
 		ach.POST("/:id/attachments", achCtrl.UploadAttachment)
+	
 	}
 
 	// ================================
@@ -85,7 +84,7 @@ func RegisterRoutes(
 	}
 
 	// ================================
-	// ADMIN
+	// ADMIN – VIEW ALL ACHIEVEMENTS (FR-010)
 	// ================================
 	admin := r.Group(
 		"/admin",
@@ -93,42 +92,83 @@ func RegisterRoutes(
 		middleware.RoleAdmin(),
 	)
 	{
-		// ADMIN USER (FR-009)
-		admin.POST("/users", adminUserCtrl.Create)
-		admin.GET("/users", adminUserCtrl.List)
-		admin.GET("/users/:id", adminUserCtrl.GetByID)
-		admin.PUT("/users/:id", adminUserCtrl.Update)
-		admin.DELETE("/users/:id", adminUserCtrl.Delete)
-		admin.PUT("/users/:id/role", adminUserCtrl.UpdateRole)
-
-		// ADMIN ACHIEVEMENT (FR-010)
+		// ADMIN – USERS (FR-009)
+    	admin.POST("/users", adminUserCtrl.Create)
+    	admin.GET("/users", adminUserCtrl.List)
+    	admin.GET("/users/:id", adminUserCtrl.GetByID)
+    	admin.PUT("/users/:id", adminUserCtrl.Update)
+    	admin.DELETE("/users/:id", adminUserCtrl.Delete)
+    	admin.PUT("/users/:id/role", adminUserCtrl.UpdateRole)
+		// ADMIN – ACHIEVEMENTS (FR-010)
 		admin.GET("/achievements", adminAchCtrl.ListAll)
 	}
 
-	// ================================
-	// DASHBOARD (ROLE BASED) 26–28
-	// ================================
-	dashboard := r.Group("/dashboard", middleware.JWTMiddleware())
-	{
-		// 26. Dashboard Mahasiswa
-		dashboard.GET(
-			"/student",
-			middleware.RoleStudent(),
-			dashboardCtrl.Student,
-		)
+// ================================
+// DASHBOARD (ROLE BASED)
+// ================================
+// Dashboard digunakan untuk menampilkan ringkasan data
+// berdasarkan peran (role) user yang login
+//
+// 26. Mahasiswa  → ringkasan prestasi milik sendiri
+// 27. Dosen      → ringkasan status prestasi mahasiswa
+// 28. Admin      → statistik global sistem
+dashboard := r.Group(
+	"/dashboard",
+	middleware.JWTMiddleware(), // wajib login (JWT)
+)
+{
+	// --------------------------------
+	// 26. DASHBOARD MAHASISWA
+	// --------------------------------
+	// Endpoint:
+	// GET /dashboard/student
+	//
+	// Hak Akses:
+	// - Hanya MAHASISWA
+	//
+	// Fungsi:
+	// - Menampilkan jumlah prestasi:
+	//   draft, submitted, approved, rejected
+	dashboard.GET(
+		"/student",
+		middleware.RoleStudent(),
+		dashboardCtrl.Student,
+	)
 
-		// 27. Dashboard Dosen
-		dashboard.GET(
-			"/lecturer",
-			middleware.RoleLecturer(),
-			dashboardCtrl.Lecturer,
-		)
+	// --------------------------------
+	// 27. DASHBOARD DOSEN
+	// --------------------------------
+	// Endpoint:
+	// GET /dashboard/lecturer
+	//
+	// Hak Akses:
+	// - Hanya DOSEN
+	//
+	// Fungsi:
+	// - Menampilkan jumlah prestasi mahasiswa
+	//   yang perlu ditinjau (submitted, approved, rejected)
+	dashboard.GET(
+		"/lecturer",
+		middleware.RoleLecturer(),
+		dashboardCtrl.Lecturer,
+	)
 
-		// 28. Dashboard Admin
-		dashboard.GET(
-			"/admin",
-			middleware.RoleAdmin(),
-			dashboardCtrl.Admin,
-		)
-	}
+	// --------------------------------
+	// 28. DASHBOARD ADMIN
+	// --------------------------------
+	// Endpoint:
+	// GET /dashboard/admin
+	//
+	// Hak Akses:
+	// - Hanya ADMIN
+	//
+	// Fungsi:
+	// - Menampilkan statistik global sistem:
+	//   total mahasiswa, total prestasi, status prestasi
+	dashboard.GET(
+		"/admin",
+		middleware.RoleAdmin(),
+		dashboardCtrl.Admin,
+	)
+}
 }
