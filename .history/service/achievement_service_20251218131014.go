@@ -244,18 +244,3 @@ func (s *AchievementService) GetStudentSummary(
 
 	return stats, nil
 }
-/*
-	GetLecturerSummary
-	Ringkasan dashboard dosen wali
-*/
-func (s *AchievementService) GetLecturerSummary(
-	ctx context.Context,
-) (map[string]int, error) {
-
-	stats, err := s.achRepo.CountByStatus(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	return stats, nil
-}

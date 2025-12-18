@@ -59,11 +59,10 @@ func main() {
 
 	adminUserService := service.NewAdminUserService(userPGRepo)
 
-	dashboardService := service.NewDashboardService(
+		dashboardService := service.NewDashboardService(
 		achievementPGRepo,
 		userPGRepo,
 	)
-
 
 
 	// ===============================
@@ -78,10 +77,6 @@ func main() {
 
 	adminUserController :=
 		controller.NewAdminUserController(adminUserService)
-	
-	dashboardController :=
-		controller.NewDashboardController(dashboardService)
-
 
 	// ===============================
 	// 5. Init Gin (INI YANG TADI HILANG)
@@ -98,7 +93,6 @@ func main() {
 		statsController,
 		adminAchievementController,
 		adminUserController,
-		dashboardController,
 	
 	)
 

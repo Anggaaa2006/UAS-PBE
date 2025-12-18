@@ -79,9 +79,6 @@ func main() {
 	adminUserController :=
 		controller.NewAdminUserController(adminUserService)
 	
-	dashboardController :=
-		controller.NewDashboardController(dashboardService)
-
 
 	// ===============================
 	// 5. Init Gin (INI YANG TADI HILANG)
@@ -98,7 +95,6 @@ func main() {
 		statsController,
 		adminAchievementController,
 		adminUserController,
-		dashboardController,
 	
 	)
 

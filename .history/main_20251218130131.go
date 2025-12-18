@@ -79,7 +79,7 @@ func main() {
 	adminUserController :=
 		controller.NewAdminUserController(adminUserService)
 	
-	dashboardController :=
+		dashboardController :=
 		controller.NewDashboardController(dashboardService)
 
 
@@ -98,7 +98,6 @@ func main() {
 		statsController,
 		adminAchievementController,
 		adminUserController,
-		dashboardController,
 	
 	)
 

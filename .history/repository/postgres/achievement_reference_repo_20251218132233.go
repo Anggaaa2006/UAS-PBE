@@ -34,9 +34,7 @@ type AchievementReferenceRepo interface {
     CountByStatus(ctx context.Context) (map[string]int, error)
     // ✅ TAMBAHAN – FR History
 	GetHistory(ctx context.Context, id string) ([]map[string]interface{}, error)
-    // Statistik prestasi per mahasiswa
-    CountByStudent(ctx context.Context, studentID string) (map[string]int, error)
-
+    
 }
 /*
     Implementasi repository

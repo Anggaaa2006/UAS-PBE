@@ -55,7 +55,11 @@ func RegisterRoutes(
 		ach.GET("", achCtrl.List)
 		ach.GET("/:id/history", achCtrl.History)
 		ach.POST("/:id/attachments", achCtrl.UploadAttachment)
-	
+		ach.POST("/:id/attachments", achAttachCtrl.Upload)
+ach.GET("/:id/attachments", achAttachCtrl.List)
+
+
+
 	}
 
 	// ================================
@@ -102,72 +106,4 @@ func RegisterRoutes(
 		// ADMIN – ACHIEVEMENTS (FR-010)
 		admin.GET("/achievements", adminAchCtrl.ListAll)
 	}
-}
-// ================================
-// DASHBOARD (ROLE BASED)
-// ================================
-// Dashboard digunakan untuk menampilkan ringkasan data
-// berdasarkan peran (role) user yang login
-//
-// 26. Mahasiswa  → ringkasan prestasi milik sendiri
-// 27. Dosen      → ringkasan status prestasi mahasiswa
-// 28. Admin      → statistik global sistem
-dashboard := r.Group(
-	"/dashboard",
-	middleware.JWTMiddleware(), // wajib login (JWT)
-)
-{
-	// --------------------------------
-	// 26. DASHBOARD MAHASISWA
-	// --------------------------------
-	// Endpoint:
-	// GET /dashboard/student
-	//
-	// Hak Akses:
-	// - Hanya MAHASISWA
-	//
-	// Fungsi:
-	// - Menampilkan jumlah prestasi:
-	//   draft, submitted, approved, rejected
-	dashboard.GET(
-		"/student",
-		middleware.RoleStudent(),
-		dashboardCtrl.Student,
-	)
-
-	// --------------------------------
-	// 27. DASHBOARD DOSEN
-	// --------------------------------
-	// Endpoint:
-	// GET /dashboard/lecturer
-	//
-	// Hak Akses:
-	// - Hanya DOSEN
-	//
-	// Fungsi:
-	// - Menampilkan jumlah prestasi mahasiswa
-	//   yang perlu ditinjau (submitted, approved, rejected)
-	dashboard.GET(
-		"/lecturer",
-		middleware.RoleLecturer(),
-		dashboardCtrl.Lecturer,
-	)
-
-	// --------------------------------
-	// 28. DASHBOARD ADMIN
-	// --------------------------------
-	// Endpoint:
-	// GET /dashboard/admin
-	//
-	// Hak Akses:
-	// - Hanya ADMIN
-	//
-	// Fungsi:
-	// - Menampilkan statistik global sistem:
-	//   total mahasiswa, total prestasi, status prestasi
-	dashboard.GET(
-		"/admin",
-		middleware.RoleAdmin(),
-		dashboardCtrl.Admin,
-	)
 }

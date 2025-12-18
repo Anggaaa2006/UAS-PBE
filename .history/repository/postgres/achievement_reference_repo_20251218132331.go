@@ -462,3 +462,38 @@ func (r *achievementReferenceRepo) GetHistory(
 
 	return history, nil
 }
+/*
+	CountByStudent
+	Menghitung jumlah prestasi mahasiswa berdasarkan status
+*/
+func (r *achievementReferenceRepo) CountByStudent(
+	ctx context.Context,
+	studentID string,
+) (map[string]int, error) {
+
+	query := `
+		SELECT status, COUNT(*) 
+		FROM achievement_references
+		WHERE student_id = $1
+		GROUP BY status
+	`
+
+	rows, err := r.db.QueryContext(ctx, query, studentID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	result := make(map[string]int)
+
+	for rows.Next() {
+		var status string
+		var total int
+		if err := rows.Scan(&status, &total); err != nil {
+			return nil, err
+		}
+		result[status] = total
+	}
+
+	return result, nil
+}

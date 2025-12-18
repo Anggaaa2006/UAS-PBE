@@ -228,34 +228,3 @@ func (s *AchievementService) GetHistory(
 
 	return s.achRepo.GetHistory(ctx, id)
 }
-/*
-	GetStudentSummary
-	Ringkasan dashboard mahasiswa
-*/
-func (s *AchievementService) GetStudentSummary(
-	ctx context.Context,
-	studentID string,
-) (map[string]int, error) {
-
-	stats, err := s.achRepo.CountByStudent(ctx, studentID)
-	if err != nil {
-		return nil, err
-	}
-
-	return stats, nil
-}
-/*
-	GetLecturerSummary
-	Ringkasan dashboard dosen wali
-*/
-func (s *AchievementService) GetLecturerSummary(
-	ctx context.Context,
-) (map[string]int, error) {
-
-	stats, err := s.achRepo.CountByStatus(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	return stats, nil
-}

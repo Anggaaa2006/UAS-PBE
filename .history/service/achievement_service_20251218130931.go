@@ -228,34 +228,75 @@ func (s *AchievementService) GetHistory(
 
 	return s.achRepo.GetHistory(ctx, id)
 }
+package controller
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"uas_pbe/service"
+	"uas_pbe/utils"
+)
+
 /*
-	GetStudentSummary
-	Ringkasan dashboard mahasiswa
+	DashboardController
+	Menangani dashboard berdasarkan role user
 */
-func (s *AchievementService) GetStudentSummary(
-	ctx context.Context,
-	studentID string,
-) (map[string]int, error) {
-
-	stats, err := s.achRepo.CountByStudent(ctx, studentID)
-	if err != nil {
-		return nil, err
-	}
-
-	return stats, nil
+type DashboardController struct {
+	achSvc   *service.AchievementService
+	statsSvc service.StatsService
 }
-/*
-	GetLecturerSummary
-	Ringkasan dashboard dosen wali
-*/
-func (s *AchievementService) GetLecturerSummary(
-	ctx context.Context,
-) (map[string]int, error) {
 
-	stats, err := s.achRepo.CountByStatus(ctx)
+func NewDashboardController(
+	achSvc *service.AchievementService,
+	statsSvc service.StatsService,
+) *DashboardController {
+	return &DashboardController{
+		achSvc:   achSvc,
+		statsSvc: statsSvc,
+	}
+}
+
+/*
+	GET /dashboard/student
+	Dashboard mahasiswa
+*/
+func (c *DashboardController) Student(ctx *gin.Context) {
+	userID := ctx.GetString("user_id")
+
+	data, err := c.achSvc.GetStudentSummary(ctx, userID)
 	if err != nil {
-		return nil, err
+		utils.Error(ctx, http.StatusInternalServerError, err.Error())
+		return
 	}
 
-	return stats, nil
+	utils.SuccessData(ctx, data)
+}
+
+/*
+	GET /dashboard/lecturer
+	Dashboard dosen wali
+*/
+func (c *DashboardController) Lecturer(ctx *gin.Context) {
+	data, err := c.achSvc.GetLecturerSummary(ctx)
+	if err != nil {
+		utils.Error(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	utils.SuccessData(ctx, data)
+}
+
+/*
+	GET /dashboard/admin
+	Dashboard admin
+*/
+func (c *DashboardController) Admin(ctx *gin.Context) {
+	data, err := c.statsSvc.GetAchievementStats(ctx)
+	if err != nil {
+		utils.Error(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	utils.SuccessData(ctx, data)
 }

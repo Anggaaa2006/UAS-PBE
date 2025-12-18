@@ -98,7 +98,7 @@ func main() {
 		statsController,
 		adminAchievementController,
 		adminUserController,
-		dashboardController,
+		dashboard
 	
 	)
 
