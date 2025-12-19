@@ -1,0 +1,16 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Sistem Manajemen Prestasi Mahasiswa (Test User)",
+        "title": "UAS PBE API",
+        "termsOfService": "http://example.com/terms/",
+        "contact": {
+            "name": "Test User",
+            "email": "testuser@example.com"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {}
+}

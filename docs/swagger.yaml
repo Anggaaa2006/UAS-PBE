@@ -1,0 +1,12 @@
+basePath: /
+host: localhost:8080
+info:
+  contact:
+    email: testuser@example.com
+    name: Test User
+  description: Sistem Manajemen Prestasi Mahasiswa (Test User)
+  termsOfService: http://example.com/terms/
+  title: UAS PBE API
+  version: "1.0"
+paths: {}
+swagger: "2.0"

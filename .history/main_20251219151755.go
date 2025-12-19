@@ -1,14 +1,4 @@
 package main
-// @title UAS PBE API
-// @version 1.0
-// @description Sistem Manajemen Prestasi Mahasiswa (Test User)
-// @termsOfService http://example.com/terms/
-
-// @contact.name Test User
-// @contact.email testuser@example.com
-
-// @host localhost:8080
-// @BasePath /
 
 import (
 	"log"

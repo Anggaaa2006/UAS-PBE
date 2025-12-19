@@ -1,15 +1,12 @@
 package main
-// @title UAS PBE API
-// @version 1.0
-// @description Sistem Manajemen Prestasi Mahasiswa (Test User)
-// @termsOfService http://example.com/terms/
-
-// @contact.name Test User
-// @contact.email testuser@example.com
-
-// @host localhost:8080
-// @BasePath /
-
+uas_pbe=# UPDATE users
+uas_pbe-# SET role = 'admin'
+uas_pbe-# WHERE email = 'angga@gmail.com';
+UPDATE 0
+uas_pbe=# SELECT email, role FROM users WHERE email = 'angga@gmail.com';
+ email | role
+-------+------
+(0 rows)
 import (
 	"log"
 

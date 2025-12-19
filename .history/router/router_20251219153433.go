@@ -5,6 +5,7 @@ import (
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/gin-gonic/gin"
 
 	"uas_pbe/controller"
 	"uas_pbe/middleware"
@@ -12,7 +13,7 @@ import (
 
 /*
 	RegisterRoutes
-	Fungsi utama untuk mendaftarkan semua endpoint API
+	Fungsi utama untuk mendaftarkan semua endpoint.
 	Dipanggil dari main.go
 */
 func RegisterRoutes(
@@ -22,23 +23,16 @@ func RegisterRoutes(
 	statsCtrl *controller.StatsController,
 	adminAchCtrl *controller.AdminAchievementController,
 	adminUserCtrl *controller.AdminUserController,
-	dashboardCtrl *controller.DashboardController,
+	dashboardCtrl *controller.DashboardController, // ✅ TAMBAHAN
 ) {
 
 	// ================================
-	// SWAGGER DOCUMENTATION
-	// ================================
-	// Akses di:
-	// http://localhost:8080/swagger/index.html
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
-	// ================================
-	// AUTH (PUBLIC)
+	// AUTH (Public)
 	// ================================
 	r.POST("/auth/login", authCtrl.Login)
 
 	// ================================
-	// AUTH (PROTECTED)
+	// AUTH (Protected)
 	// ================================
 	auth := r.Group("/auth", middleware.JWTMiddleware())
 	{
@@ -48,7 +42,7 @@ func RegisterRoutes(
 	}
 
 	// ================================
-	// ACHIEVEMENTS
+	// ACHIEVEMENT
 	// ================================
 	ach := r.Group("/achievements", middleware.JWTMiddleware())
 	{
@@ -87,7 +81,7 @@ func RegisterRoutes(
 	}
 
 	// ================================
-	// REPORTS MAHASISWA (FR-011)
+	// REPORTS PER MAHASISWA (FR-011)
 	// ================================
 	reports := r.Group("/reports", middleware.JWTMiddleware())
 	{
